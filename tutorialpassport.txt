@@ -1,0 +1,39 @@
+1 - Instalar o app 
+Laravel new api --auth
+
+2 - Instalar o passport 
+composer require laravel/passport
+
+3 - Rodar as migrations geradas pelo passport
+php artisan migrate
+
+Obs: A tabela mais usada e importante é a oauth_clients
+
+4 - Criar as chaves de autenticações necessárias 
+php artisan passport:install
+
+5 - Adicionar no model User a trait 'HasApiTokens'
+ficará assim -> 'use HasApiTokens;'
+
+6 - Registrar as rotas do passport
+Passo 1 : ir no AuthServiceProvider
+Passo 2 : no método 'boot', Adicionar a seguinte linha -> Passport::routes(); 
+
+7 - Mudar o driver de api
+Passo 1: Ir até o arquivo config/auth.php
+Passo 2: Trocar o driver do array 'api', de 'token' para 'passport'
+
+8 - Criar o client para comunicar com a api (Existe uma forma de fazer de maneira automática)
+php artisan passport::client
+
+Obs: 
+A primeira pergunta é o id do client, pode deixar em branco. 
+A segunda é o nome do client, pode ser qualquer nome. 
+A terceira é a url de retorno, se tiver mais de uma é só separar por virgula. 
+
+* Salve as informações geradas e lá no .env do client crie três variaveis : CLIENT_ID, CLIENT_SECRET, REDIRECT_URL. 
+
+9 - Se quiser parar de exibir a tela de autorização e ir direto pro fim, é só da um override no model Client.
+Passo 1: criar um model Client
+Passo 2: criar o método skipsAuthorization() e da um return true;
+Passo 3: AuthServiceProvider adicionar o código que ele identifica a modicação. -> 
